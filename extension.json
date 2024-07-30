@@ -15,6 +15,9 @@
 			"ext-curl": "*"
 		}
 	},
+	"ExtensionMessagesFiles": {
+		"BibleGettMagic": "BibleGet.i18n.magic.php"
+	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\BibleGet\\": "src/"
 	},
