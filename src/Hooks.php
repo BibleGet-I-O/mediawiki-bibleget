@@ -11,7 +11,7 @@ class Hooks implements ParserFirstCallInitHook {
 	/**
 	 * @param Parser $parser
 	 */
-	public function onParserFirstCallInit( Parser $parser ) {
+	public function onParserFirstCallInit( $parser ): void {
 		$parser->setHook( 'biblequote', [ self::class, 'renderBibleQuoteTag' ] );
 		$parser->setFunctionHook( 'biblequote', [ self::class, 'renderBibleQuote' ] );
 	}
@@ -25,7 +25,7 @@ class Hooks implements ParserFirstCallInitHook {
 	// phpcs:ignore Generic.Files.LineLength.TooLong
 	private static function retrieveBibleQuoteFromApi( string $bibleVersion, string $bibleQuote, string $hash ): string {
 		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_URL, "https://query.bibleget.io");
+		curl_setopt( $ch, CURLOPT_URL, "https://query.bibleget.io" );
 		curl_setopt( $ch, CURLOPT_POST, true );
 		// phpcs:ignore Generic.Files.LineLength.TooLong
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, "query={$bibleQuote}&version={$bibleVersion}&appid=SeminaVerbi&return=html" );
