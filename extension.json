@@ -15,8 +15,8 @@
     			"ext-curl": "*"
     		}
     },
-    "AutoloadClasses": {
-        "BibleGet\\Hooks": "BibleGet.php"
+    "AutoloadNamespaces": {
+        "MediaWiki\\Extension\\BibleGet\\": "src/"
     },
     "ResourceModules": {
         "ext.BibleGet.scripts": {
@@ -29,9 +29,14 @@
             "i18n"
         ]
     },
+    "HookHandlers": {
+        "main": {
+            "class": "MediaWiki\\Extension\\BibleGet\\Hooks"
+        }
+    },
     "Hooks": {
         "ParserFirstCallInit": [
-            "BibleGet\\Hooks::onParserFirstCallInit"
+            "handler": "main"
         ]
     },
     "config": {
@@ -39,7 +44,5 @@
             "value": "CEI2008"
         }
     },
-    "ScribuntoModules": {
-        "BibleGet": "modules"
-    }
+    "load_composer_autoloader": true
 }
