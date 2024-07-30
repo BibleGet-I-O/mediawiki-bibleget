@@ -1,48 +1,48 @@
 {
-    "manifest_version": 2
-    "name": "BibleGet",
-    "type": "parserhook",
-    "author": "John R. D'Orazio",
-    "version": "1.0.0",
-    "url": "https://github.com/BibleGet-I-O/mediawiki-bibleget/",
-    "description": "Fetch Bible quotes from the BibleGet API using Lua.",
-    "descriptionmsg": "bibleget-desc",
-    "license-name": "Apache-2.0",
-    "requires": {
-        "MediaWiki": ">= 1.31",
-    		"platform": {
-    			"php": ">= 7.1",
-    			"ext-curl": "*"
-    		}
-    },
-    "AutoloadNamespaces": {
-        "MediaWiki\\Extension\\BibleGet\\": "src/"
-    },
-    "ResourceModules": {
-        "ext.BibleGet.scripts": {
-            "scripts": [],
-            "dependencies": []
-        }
-    },
-    "MessagesDirs": {
-        "BibleGet": [
-            "i18n"
-        ]
-    },
-    "HookHandlers": {
-        "main": {
-            "class": "MediaWiki\\Extension\\BibleGet\\Hooks"
-        }
-    },
-    "Hooks": {
-        "ParserFirstCallInit": [
-            "handler": "main"
-        ]
-    },
-    "config": {
-        "BibleGetDefaultBibleVersion": {
-            "value": "CEI2008"
-        }
-    },
-    "load_composer_autoloader": true
+	"manifest_version": 2,
+	"name": "BibleGet",
+	"type": "parserhook",
+	"author": "John R. D'Orazio",
+	"version": "1.0.0",
+	"url": "https://github.com/BibleGet-I-O/mediawiki-bibleget/",
+	"description": "Fetch Bible quotes from the BibleGet API.",
+	"descriptionmsg": "bibleget-desc",
+	"license-name": "Apache-2.0",
+	"requires": {
+		"MediaWiki": ">= 1.31",
+		"platform": {
+			"php": ">= 7.1",
+			"ext-curl": "*"
+		}
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\BibleGet\\": "src/"
+	},
+	"ResourceModules": {
+		"ext.BibleGet.scripts": {
+			"scripts": [],
+			"dependencies": []
+		}
+	},
+	"MessagesDirs": {
+		"BibleGet": [
+			"i18n"
+		]
+	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\BibleGet\\Hooks"
+		}
+	},
+	"Hooks": {
+		"ParserFirstCallInit": {
+			"handler": "main"
+		}
+	},
+	"config": {
+		"BibleGetDefaultBibleVersion": {
+			"value": "CEI2008"
+		}
+	},
+	"load_composer_autoloader": true
 }

@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"JohnRDOrazio"
+		]
+	},
+	"bibleget-desc": "Fetch Bible quotes from the BibleGet API using a &lt;biblequote&gt; tag."
+}
