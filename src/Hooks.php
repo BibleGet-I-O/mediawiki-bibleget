@@ -18,17 +18,17 @@ class Hooks implements ParserFirstCallInitHook {
 
 	/**
 	 * @param string $bibleVersion
-	 * @param string $bibleQuote
+	 * @param string $bibleRef
 	 * @param string $hash
 	 * @return string
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
-	private static function retrieveBibleQuoteFromApi( string $bibleVersion, string $bibleQuote, string $hash ): string {
+	private static function retrieveBibleQuoteFromApi( string $bibleVersion, string $bibleRef, string $hash ): string {
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, "https://query.bibleget.io" );
 		curl_setopt( $ch, CURLOPT_POST, true );
 		// phpcs:ignore Generic.Files.LineLength.TooLong
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, "query={$bibleQuote}&version={$bibleVersion}&appid=SeminaVerbi&return=html" );
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, "query={$bibleRef}&version={$bibleVersion}&appid=SeminaVerbi&return=html" );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 		$output = curl_exec( $ch );
 		curl_close( $ch );
@@ -71,15 +71,15 @@ class Hooks implements ParserFirstCallInitHook {
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
 	public static function renderBibleQuoteTag( string $input, array $args ): array {
-		$bibleVersion = isset( $args['bibleVersion'] ) ? $args['bibleVersion'] : 'NABRE';
-		$bibleQuote = isset( $args['bibleQuote'] ) ? $args['bibleQuote'] : $input;
-		$str = $bibleVersion . "/" . $bibleQuote;
+		$bibleVersion = isset( $args['version'] ) ? $args['version'] : 'NABRE';
+		$bibleRef = isset( $args['ref'] ) ? $args['ref'] : $input;
+		$str = $bibleVersion . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
-		$hash = md5($tmp);
+		$hash = md5( $tmp );
 		if ( file_exists( "bibleQuotes/{$hash}.html" ) ) {
 			$html = file_get_contents( "bibleQuotes/{$hash}.html" );
 		} else {
-			$html = self::retrieveBibleQuoteFromApi( $bibleVersion, $bibleQuote, $hash );
+			$html = self::retrieveBibleQuoteFromApi( $bibleVersion, $bibleRef, $hash );
 		}
 		return [ $html, 'noparse' => true, 'isHTML' => true ];
 	}
@@ -87,18 +87,18 @@ class Hooks implements ParserFirstCallInitHook {
 	/**
 	 * @param Parser $parser
 	 * @param string $bibleVersion
-	 * @param string $bibleQuote
+	 * @param string $bibleRef
 	 * @return array
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
-	public static function renderBibleQuote( Parser $parser, string $bibleVersion = 'NABRE', string $bibleQuote = 'John3:16' ): array {
-		$str = $bibleVersion . "/" . $bibleQuote;
+	public static function renderBibleQuote( Parser $parser, string $bibleVersion = 'NABRE', string $bibleRef = 'John3:16' ): array {
+		$str = $bibleVersion . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
 		$hash = md5( $tmp );
 		if ( file_exists( "bibleQuotes/{$hash}.html" ) ) {
 			$html = file_get_contents( "bibleQuotes/{$hash}.html" );
 		} else {
-			$html = self::retrieveBibleQuoteFromApi( $bibleVersion, $bibleQuote, $hash );
+			$html = self::retrieveBibleQuoteFromApi( $bibleVersion, $bibleRef, $hash );
 		}
 		return [ $html, 'noparse' => true, 'isHTML' => true ];
 	}
