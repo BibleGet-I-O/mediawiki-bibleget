@@ -4,14 +4,14 @@ namespace MediaWiki\Extension\BibleGet;
 
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Parser\Parser;
-use MediaWiki\Parser\PPFrame;
+use PPFrame;
 
 class Hooks implements ParserFirstCallInitHook {
 
 	/**
 	 * @param Parser $parser
 	 */
-	public static function onParserFirstCallInit( Parser $parser ) {
+	public function onParserFirstCallInit( Parser $parser ) {
 		$parser->setHook( 'biblequote', [ self::class, 'renderBibleQuoteTag' ] );
 		$parser->setFunctionHook( 'biblequote', [ self::class, 'renderBibleQuote' ] );
 	}
