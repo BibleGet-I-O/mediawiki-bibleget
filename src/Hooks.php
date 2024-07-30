@@ -11,7 +11,7 @@ class Hooks implements ParserFirstCallInitHook {
 	/**
 	 * @param Parser $parser
 	 */
-	public static function onParserFirstCallInit( Parser $parser ) {
+	public function onParserFirstCallInit( Parser $parser ) {
 		$parser->setHook( 'biblequote', [ self::class, 'renderBibleQuoteTag' ] );
 		$parser->setFunctionHook( 'biblequote', [ self::class, 'renderBibleQuote' ] );
 	}
@@ -22,10 +22,12 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @param string $hash
 	 * @return string
 	 */
+	// phpcs:ignore Generic.Files.LineLength.TooLong
 	private static function retrieveBibleQuoteFromApi( string $bibleVersion, string $bibleQuote, string $hash ): string {
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, "https://query.bibleget.io");
 		curl_setopt( $ch, CURLOPT_POST, true );
+		// phpcs:ignore Generic.Files.LineLength.TooLong
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, "query={$bibleQuote}&version={$bibleVersion}&appid=SeminaVerbi&return=html" );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 		$output = curl_exec( $ch );
@@ -67,6 +69,7 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @param PPFrame $frame
 	 * @return array
 	 */
+	// phpcs:ignore Generic.Files.LineLength.TooLong
 	private static function renderBibleQuoteTag( string $input, array $args, Parser $parser, PPFrame $frame ): array {
 		$bibleVersion = isset( $args['bibleVersion'] ) ? $args['bibleVersion'] : 'NABRE';
 		$bibleQuote = isset( $args['bibleQuote'] ) ? $args['bibleQuote'] : $input;
@@ -87,6 +90,7 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @param string $bibleQuote
 	 * @return array
 	 */
+	// phpcs:ignore Generic.Files.LineLength.TooLong
 	private static function renderBibleQuote( Parser $parser, string $bibleVersion = 'NABRE', string $bibleQuote = 'John3:16' ): array {
 		$str = $bibleVersion . "/" . $bibleQuote;
 		$tmp = preg_replace( "/\s+/", "", $str );
