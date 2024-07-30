@@ -3,15 +3,15 @@
 namespace MediaWiki\Extension\BibleGet;
 
 use MediaWiki\Hook\ParserFirstCallInitHook;
-use Parser;
-use PPFrame;
+use MediaWiki\Parser\Parser;
+use MediaWiki\Parser\PPFrame;
 
 class Hooks implements ParserFirstCallInitHook {
 
 	/**
 	 * @param Parser $parser
 	 */
-	public function onParserFirstCallInit( Parser $parser ) {
+	public static function onParserFirstCallInit( Parser $parser ) {
 		$parser->setHook( 'biblequote', [ self::class, 'renderBibleQuoteTag' ] );
 		$parser->setFunctionHook( 'biblequote', [ self::class, 'renderBibleQuote' ] );
 	}
@@ -70,7 +70,7 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @return array
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
-	private static function renderBibleQuoteTag( string $input, array $args, Parser $parser, PPFrame $frame ): array {
+	private static function renderBibleQuoteTag( string $input, array $args ): array {
 		$bibleVersion = isset( $args['bibleVersion'] ) ? $args['bibleVersion'] : 'NABRE';
 		$bibleQuote = isset( $args['bibleQuote'] ) ? $args['bibleQuote'] : $input;
 		$str = $bibleVersion . "/" . $bibleQuote;

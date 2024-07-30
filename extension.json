@@ -29,15 +29,8 @@
 			"i18n"
 		]
 	},
-	"HookHandlers": {
-		"main": {
-			"class": "MediaWiki\\Extension\\BibleGet\\Hooks"
-		}
-	},
 	"Hooks": {
-		"ParserFirstCallInit": {
-			"handler": "main"
-		}
+		"ParserFirstCallInit": "MediaWiki\\Extension\\BibleGet\\Hooks::onParserFirstCallInit"
 	},
 	"config": {
 		"BibleGetDefaultBibleVersion": {
