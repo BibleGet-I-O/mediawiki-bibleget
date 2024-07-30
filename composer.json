@@ -1,10 +1,24 @@
 {
+	"name": "mediawiki/bibleget",
+	"type": "mediawiki-extension",
+	"description": "Fetches Bible quotes from the BibleGet API with the <biblequote> tag.",
+	"keywords": [
+		"MediaWiki",
+		"BibleGet"
+	],
+	"homepage": "https://github.com/BibleGet-I-O/mediawiki-extensions-BibleGet/",
+	"license": "Apache-2.0",
 	"require-dev": {
 		"mediawiki/mediawiki-codesniffer": "43.0.0",
 		"mediawiki/mediawiki-phan-config": "0.14.0",
 		"mediawiki/minus-x": "1.1.3",
 		"php-parallel-lint/php-console-highlighter": "1.0.0",
 		"php-parallel-lint/php-parallel-lint": "1.4.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"MediaWiki\\Extension\\BibleGet\\": "src/"
+		}
 	},
 	"scripts": {
 		"test": [
