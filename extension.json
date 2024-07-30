@@ -1,0 +1,45 @@
+{
+    "manifest_version": 2
+    "name": "BibleGet",
+    "type": "parserhook",
+    "author": "John R. D'Orazio",
+    "version": "1.0.0",
+    "url": "https://github.com/BibleGet-I-O/mediawiki-bibleget/",
+    "description": "Fetch Bible quotes from the BibleGet API using Lua.",
+    "descriptionmsg": "bibleget-desc",
+    "license-name": "Apache-2.0",
+    "requires": {
+        "MediaWiki": ">= 1.31",
+    		"platform": {
+    			"php": ">= 7.1",
+    			"ext-curl": "*"
+    		}
+    },
+    "AutoloadClasses": {
+        "BibleGet\\Hooks": "BibleGet.php"
+    },
+    "ResourceModules": {
+        "ext.BibleGet.scripts": {
+            "scripts": [],
+            "dependencies": []
+        }
+    },
+    "MessagesDirs": {
+        "BibleGet": [
+            "i18n"
+        ]
+    },
+    "Hooks": {
+        "ParserFirstCallInit": [
+            "BibleGet\\Hooks::onParserFirstCallInit"
+        ]
+    },
+    "config": {
+        "BibleGetDefaultBibleVersion": {
+            "value": "CEI2008"
+        }
+    },
+    "ScribuntoModules": {
+        "BibleGet": "modules"
+    }
+}
