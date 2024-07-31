@@ -68,7 +68,8 @@ class Hooks implements ParserFirstCallInitHook {
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
 	public static function renderBibleQuoteTag( ?string $input, array $args ): array {
-		$bibleVersion = isset( $args['version'] ) ? $args['version'] : 'NABRE';
+		global $wgBibleGetDefaultBibleVersion;
+		$bibleVersion = isset( $args['version'] ) ? $args['version'] : ( $wgBibleGetDefaultBibleVersion ?? 'NABRE' );
 		$bibleRef = isset( $args['ref'] )
 						? $args['ref']
 						: ( $input ?? 'John3:16' );
@@ -90,7 +91,9 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @return array
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
-	public static function renderBibleQuote( Parser $parser, string $bibleVersion = 'NABRE', string $bibleRef = 'John3:16' ): array {
+	public static function renderBibleQuote( Parser $parser, ?string $bibleVersion = null, string $bibleRef = 'John3:16' ): array {
+		global $wgBibleGetDefaultBibleVersion;
+		$bibleVersion = $bibleVersion ?? $wgBibleGetDefaultBibleVersion ?? 'NABRE';
 		$str = $bibleVersion . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
 		$hash = md5( $tmp );
