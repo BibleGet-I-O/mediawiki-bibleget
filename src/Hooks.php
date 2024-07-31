@@ -7,6 +7,19 @@ use MediaWiki\Parser\Parser;
 
 class Hooks implements ParserFirstCallInitHook {
 
+	private const VERSIONS_AVAILABLE = [
+		"NABRE",
+		"NVBSE",
+		"LUZZI",
+		"CEI2008",
+		"DRB",
+		"VGCL"
+	];
+
+	private static function isValidVersion( string $version ): bool {
+		return in_array( $version, self::VERSIONS_AVAILABLE );
+	}
+
 	/**
 	 * @param Parser $parser
 	 */
@@ -74,10 +87,29 @@ class Hooks implements ParserFirstCallInitHook {
 	// phpcs:ignore Generic.Files.LineLength.TooLong
 	public static function renderBibleQuoteTag( ?string $input, array $args ): array {
 		global $wgBibleGetDefaultBibleVersion;
-		$bibleVersion = isset( $args['version'] ) ? $args['version'] : $wgBibleGetDefaultBibleVersion;
-		$bibleRef = isset( $args['ref'] )
+		$bibleRef 	  = isset( $args['ref'] )
 						? $args['ref']
 						: ( $input ?? 'John3:16' );
+		$inline = isset( $args['inline'] )
+						? filter_var( $args['inline'], FILTER_VALIDATE_BOOLEAN )
+						: false;
+		$bibleVersion = $wgBibleGetDefaultBibleVersion;
+		if ( isset( $args['version'] ) ) {
+			if ( self::isValidVersion( $args['version'] ) ) {
+				$bibleVersion = $args['version'];
+			} else {
+				$inlineStr = $inline ? 'true' : 'false';
+				$html = "<span class=\"bibleQuoteRefBroken\""
+					. " data-ref=\"{$bibleRef}\" data-version=\"{$args['version']}\" data-inline=\"{$inlineStr}\""
+					. " title=\"The Bible version '{$args['version']}' is not supported by the BibleGet endpoint.\">"
+					. $bibleRef
+					. "</span>"
+					. "<sup class=\"bibleQuoteRefBrokenReason\""
+					. " title=\"The Bible version '{$args['version']}' is not supported by the BibleGet endpoint.\""
+					. ">[!]</sup>";
+				return [ $html, 'noparse' => true, 'isHTML' => true ];
+			}
+		}
 		$str = $bibleVersion . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
 		$hash = md5( $tmp );
@@ -96,17 +128,32 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @return array
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
-	public static function renderBibleQuote( Parser $parser, string $bibleRef = '', ?string $bibleVersion = null ): array {
+	public static function renderBibleQuote( Parser $parser, string $bibleRef = 'John3:16', bool $inline = false, ?string $bibleVersion = null ): array {
 		global $wgBibleGetDefaultBibleVersion;
-		$bibleRef = $bibleRef !== '' ? $bibleRef : 'John3:16';
-		$bibleVersion = $bibleVersion ?? $wgBibleGetDefaultBibleVersion;
-		$str = $bibleVersion . "/" . $bibleRef;
+		$bibleEdition = $wgBibleGetDefaultBibleVersion;
+		if ( $bibleVersion !== null ) {
+			if ( self::isValidVersion( $bibleVersion ) ) {
+				$bibleEdition = $bibleVersion;
+			} else {
+				$inlineStr = $inline ? 'true' : 'false';
+				$html = "<span class=\"bibleQuoteRefBroken\""
+					. " data-ref=\"{$bibleRef}\" data-version=\"{$bibleVersion}\" data-inline=\"{$inlineStr}\""
+					. " title=\"The Bible version '{$bibleVersion}' is not supported by the BibleGet endpoint.\">"
+					. $bibleRef
+					. "</span>"
+					. "<sup class=\"bibleQuoteRefBrokenReason\""
+					. " title=\"The Bible version '{$bibleVersion}' is not supported by the BibleGet endpoint.\""
+					. ">[!]</sup>";
+				return [ $html, 'noparse' => true, 'isHTML' => true ];
+			}
+		}
+		$str = $bibleEdition . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
 		$hash = md5( $tmp );
 		if ( file_exists( "bibleQuotes/{$hash}.html" ) ) {
 			$html = file_get_contents( "bibleQuotes/{$hash}.html" );
 		} else {
-			$html = self::retrieveBibleQuoteFromApi( $bibleVersion, $bibleRef, $hash );
+			$html = self::retrieveBibleQuoteFromApi( $bibleEdition, $bibleRef, $hash );
 		}
 		return [ $html, 'noparse' => true, 'isHTML' => true ];
 	}
