@@ -56,6 +56,11 @@ class Hooks implements ParserFirstCallInitHook {
 			'<$1i>',
 			$output
 		);
+		$output = preg_replace(
+			'/(bookChapter">[1-4])(\p{L})/',
+			'$1&nbsp;$2',
+			$output
+		);
 
 		file_put_contents( "bibleQuotes/{$hash}.html", $output );
 		return $output;
@@ -69,7 +74,7 @@ class Hooks implements ParserFirstCallInitHook {
 	// phpcs:ignore Generic.Files.LineLength.TooLong
 	public static function renderBibleQuoteTag( ?string $input, array $args ): array {
 		global $wgBibleGetDefaultBibleVersion;
-		$bibleVersion = isset( $args['version'] ) ? $args['version'] : ( $wgBibleGetDefaultBibleVersion ?? 'NABRE' );
+		$bibleVersion = isset( $args['version'] ) ? $args['version'] : $wgBibleGetDefaultBibleVersion;
 		$bibleRef = isset( $args['ref'] )
 						? $args['ref']
 						: ( $input ?? 'John3:16' );
@@ -93,7 +98,7 @@ class Hooks implements ParserFirstCallInitHook {
 	// phpcs:ignore Generic.Files.LineLength.TooLong
 	public static function renderBibleQuote( Parser $parser, ?string $bibleVersion = null, string $bibleRef = 'John3:16' ): array {
 		global $wgBibleGetDefaultBibleVersion;
-		$bibleVersion = $bibleVersion ?? $wgBibleGetDefaultBibleVersion ?? 'NABRE';
+		$bibleVersion = $bibleVersion ?? $wgBibleGetDefaultBibleVersion;
 		$str = $bibleVersion . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
 		$hash = md5( $tmp );

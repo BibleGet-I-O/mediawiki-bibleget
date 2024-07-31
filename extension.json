@@ -44,7 +44,7 @@
 	},
 	"config": {
 		"BibleGetDefaultBibleVersion": {
-			"value": "CEI2008"
+			"value": "NABRE"
 		}
 	},
 	"load_composer_autoloader": true
