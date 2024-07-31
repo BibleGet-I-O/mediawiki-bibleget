@@ -4,7 +4,6 @@ namespace MediaWiki\Extension\BibleGet;
 
 use MediaWiki\Hook\ParserFirstCallInitHook;
 use MediaWiki\Parser\Parser;
-use PPFrame;
 
 class Hooks implements ParserFirstCallInitHook {
 
@@ -65,14 +64,14 @@ class Hooks implements ParserFirstCallInitHook {
 	/**
 	 * @param string $input
 	 * @param array $args
-	 * @param Parser $parser
-	 * @param PPFrame $frame
 	 * @return array
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
-	public static function renderBibleQuoteTag( string $input, array $args ): array {
+	public static function renderBibleQuoteTag( ?string $input, array $args ): array {
 		$bibleVersion = isset( $args['version'] ) ? $args['version'] : 'NABRE';
-		$bibleRef = isset( $args['ref'] ) ? $args['ref'] : $input;
+		$bibleRef = isset( $args['ref'] )
+						? $args['ref']
+						: ( $input ?? 'John3:16' );
 		$str = $bibleVersion . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
 		$hash = md5( $tmp );
