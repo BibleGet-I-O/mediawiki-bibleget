@@ -96,9 +96,9 @@ class Hooks implements ParserFirstCallInitHook {
 	 * @return array
 	 */
 	// phpcs:ignore Generic.Files.LineLength.TooLong
-	public static function renderBibleQuote( Parser $parser, ?string $bibleRef = null, ?string $bibleVersion = null ): array {
+	public static function renderBibleQuote( Parser $parser, string $bibleRef = '', ?string $bibleVersion = null ): array {
 		global $wgBibleGetDefaultBibleVersion;
-		$bibleRef = $bibleRef ?? 'John3:16';
+		$bibleRef = $bibleRef !== '' ? $bibleRef : 'John3:16';
 		$bibleVersion = $bibleVersion ?? $wgBibleGetDefaultBibleVersion;
 		$str = $bibleVersion . "/" . $bibleRef;
 		$tmp = preg_replace( "/\s+/", "", $str );
